@@ -3,7 +3,7 @@ import random
 from customException import InvalidInputHangmanError, ResponseLengthError
 import os
 
-def get_words_and_wordcount():
+def get_words_and_wordCount():
 
     ''' Returns a list of words and the number of words in the list.
 
@@ -36,10 +36,12 @@ def prepare_game(word):
     '''
 
     letterHolder = list()
+
     for letter in range(0,len(word)):
 
         if word[letter] == '-' or word[letter] == '\'':
             letterHolder.append(word[letter])
+
         else:
             letterHolder.append("_")
     
@@ -74,7 +76,7 @@ def check_guess(letterHolder,word,userGuess,usedWords,usedLetters):
         raise ResponseLengthError("Guess must be at least one character in length. Please try again.")
     
     for letter in range(0,lengthOfGuess):
-           
+
         if ord(userGuess[letter].upper()) < 65 or ord(userGuess[letter].upper()) > 90:
             raise InvalidInputHangmanError("Invalid input. Must be a character or word with no special characters. Please try again.")
                     
@@ -85,6 +87,7 @@ def check_guess(letterHolder,word,userGuess,usedWords,usedLetters):
             return gameWon,guessedCorrectly,letterHolder
 
         for letter in range(0,lengthOfWord):
+
             if userGuess == word[letter]:
                 guessedCorrectly = True
                 letterHolder[letter] = userGuess
@@ -101,6 +104,7 @@ def check_guess(letterHolder,word,userGuess,usedWords,usedLetters):
         if gameWon:
             guessedCorrectly = True
             return gameWon,guessedCorrectly,word
+
         else:
             return gameWon,guessedCorrectly,letterHolder
 
@@ -119,7 +123,6 @@ def print_game_state(numberOfGuesses,letterHolder):
     print(f"\nNumber of guesses: {numberOfGuesses}")
 
     for letter in range(0,len(letterHolder)):
-
         temp += str(letterHolder[letter] + " ")
     
     print(temp)
@@ -142,13 +145,16 @@ def check_for_winner(guess = None,word = None,letterHolder = None):
     winner = True
 
     if letterHolder is not None:
+
         for letter in letterHolder:
             if letter == "_":
                 winner = False
                 return winner
         return winner
+
     elif guess == ''.join(word):
         return winner
+
     else:
         winner = False
         return winner
@@ -175,11 +181,12 @@ def play():
     gameOver = False
     gameLost = False
 
-    words,count = get_words_and_wordcount()
+    words,count = get_words_and_wordCount()
 
     random.seed()
 
     wordToGuess = list(words[random.randint(0,count)])
+
     letterHolder = prepare_game(wordToGuess)
 
     while not gameOver:
@@ -190,33 +197,35 @@ def play():
 
         try:
             userGuess = input("Enter a letter or guess the entire word: ")
-
             gameOver,correctGuess,letterHolder = check_guess(letterHolder,wordToGuess,userGuess,usedWords,usedLetters)
 
         except InvalidInputHangmanError as e:
             print(e)
+
         except ResponseLengthError as e:
             print(e)
 
         else:
             if not correctGuess:
                 numberOfGuesses += 1
-            
+
             if numberOfGuesses == 6:
                 gameOver = True
                 gameLost = True
-            
+
             if check_for_winner(None,None,letterHolder):
                 gameOver = True
-            
+
             if len(userGuess) == 1:
                 usedLetters.append(userGuess)
+
             else:
                 usedWords.append(userGuess)
-    
+
     if gameLost:
         os.system('cls' if os.name == 'nt' else 'clear')
         print(f"You ran out of guesses! The word was \"{''.join(wordToGuess)}\"")
+        
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
         print(f"YOU WON!!! The correct word was \"{''.join(wordToGuess)}\" and you had {numberOfGuesses} strikes!")

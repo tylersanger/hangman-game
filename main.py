@@ -55,7 +55,7 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 if res.upper() == 'Y':
     hangman.play()
-
+    
 else:
     print("You chose to not play. See you next time!")
     exit(0)
