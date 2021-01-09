@@ -1,7 +1,7 @@
 '''
 Created by Tyler Sanger
-Creation date: 01/04/2021
-Copying without permission is prohibited
+Copyright: 01/04/2021
+This software is licensed under the MIT license.
 
 This program plays a game of Hangman. It will choose a randomly chosen word from 3000 words and have the player guess until they have either
 guessed the entire word or reached the six strike
