@@ -7,10 +7,10 @@ class InvalidInputHangmanError(Exception):
 
     def __init__(self,message):
 
-        self.message = message
+        self.__message = message
     
     def __str__(self):
-        return self.message
+        return self.__message
 
 
 
@@ -23,7 +23,7 @@ class ResponseLengthError(Exception):
 
     def __init__(self,message):
 
-        self.message = message
+        self.__message = message
 
     def __str__(self):
-        return self.message
+        return self.__message
