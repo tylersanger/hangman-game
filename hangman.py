@@ -14,6 +14,18 @@ class Hangman:
         self.__usedLetters = []
         self.__usedWords = []
         self.__wordToGuess = []
+    
+    def __str__(self):
+
+        temp = ''
+
+        for letter in self.__letterHolder:
+            temp += letter + " "
+        
+        temp += "\n"
+        
+        return str("You have " + str(self.__strikes) + " strikes.\n" +
+               str(temp))
 
 
     def __get_words_and_wordCount(self):
@@ -36,17 +48,6 @@ class Hangman:
 
 
     def __prepare_game(self,word):
-
-        '''This function will take the randomly chosen word and create a list to hold each letter of that word.
-        This will automatically display any special characters in the random word such as ' or -. The rest of
-        the letters are represented as a underscore (_).
-
-        Input: 
-        word: The randomly chosen word the player will be guessing as a list of characters.
-
-        Output:
-        letterHolder: The list that will be updated when the player guesses a correct letter.
-        '''
 
         letterHolder = list()
 
@@ -105,47 +106,25 @@ class Hangman:
             gameWon = self.check_for_winner(guess,self.__wordToGuess,None)
 
             if gameWon:
-                guessedCorrectly = True
-                return gameWon,guessedCorrectly,self.__wordToGuess
+                return gameWon,self.__wordToGuess
 
             else:
                 self.__add_guess_to_list(guess)
                 self.__strikes += 1
-                return gameWon,guessedCorrectly,self.__letterHolder
+                return gameWon,self.__letterHolder
 
 
     def get_game_state(self):
-        '''
-            This function prints the current state of how many strikes the player has and the current state of the letterHolder list.
-
-            Input:
-                numberOfGuesses: How many strikes the player currently has.
-                letterHolder: List containing the guessed and missing letters.
-        '''
 
         temp = ""
-
-        print(f"\nNumber of strikes: {self.__strikes}")
 
         for letter in range(0,len(self.__letterHolder)):
             temp += str(self.__letterHolder[letter] + " ")
         
-        return self.__strikes,temp
+        return self.__strikes,self.__letterHolder
 
 
     def check_for_winner(self,guess = None,word = None,letterHolder = None):
-        
-        '''
-            This function checks to see if the player has won the game. If there are no more underscores (_) left in the letterHolder list
-            or the user guessed the word correctly they have won.
-
-            Input:
-                guess: The players guessed letter or word.
-                word: The word the player is trying to guess.
-                letterHolder: The list containing guessed letters or underscores (_) for un-guessed letters.
-            Return:
-                winner: Returns True if there are no underscores (_) left in letterHolder or if the word was guessed correctly.
-        '''
 
         winner = True
 
@@ -175,6 +154,7 @@ class Hangman:
 
         self.__letterHolder = self.__prepare_game(self.__wordToGuess)
     
+
     def __add_guess_to_list(self,guess):
 
         if len(guess) == 1:
@@ -182,17 +162,8 @@ class Hangman:
         else:
             self.__usedWords.append(guess)
     
+
     def get_word_to_guess(self):
         return self.__wordToGuess
-    
-    def print_game_state(self):
-
-        temp = ''
-
-        for letter in self.__letterHolder:
-            temp += letter + " "
-        
-        print(f"You have {self.__strikes} strikes.")
-        print(temp)
     
 

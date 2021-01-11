@@ -13,7 +13,6 @@ class InvalidInputHangmanError(Exception):
         return self.__message
 
 
-
 class ResponseLengthError(Exception):
 
     '''

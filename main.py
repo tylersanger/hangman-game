@@ -68,16 +68,21 @@ if res.upper() == 'Y':
 
         try:
             userGuess = input("Enter a letter or guess the entire word: ")
+            os.system('cls' if os.name == 'nt' else 'clear')
             gameOver,letterHolder = h1.check_guess(userGuess)
+
+            if gameOver:
+                break
 
         except InvalidInputHangmanError as e:
             print(e)
 
+
         except ResponseLengthError as e:
             print(e)
 
-        else:
 
+        else:
             strikes,letterHolder = h1.get_game_state()
 
             if strikes == 6:
@@ -87,9 +92,7 @@ if res.upper() == 'Y':
             if h1.check_for_winner(None,None,letterHolder):
                 gameOver = True
 
-        os.system('cls' if os.name == 'nt' else 'clear')
-        h1.print_game_state()
-
+            print(h1)
 
     if gameLost:
         wordToGuess = h1.get_word_to_guess()
