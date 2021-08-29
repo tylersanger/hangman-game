@@ -65,47 +65,6 @@ while not validRes:
 os.system('cls' if os.name == 'nt' else 'clear')
 
 if res.upper() == 'Y':
-<<<<<<< HEAD
-    h1.play()
-
-    while not gameOver:
-
-        correctGuess = False
-
-        try:
-            userGuess = input("Enter a letter or guess the entire word: ")
-            os.system('cls' if os.name == 'nt' else 'clear')
-            gameOver,letterHolder = h1.check_guess(userGuess)
-
-            if gameOver:
-                break
-
-        except InvalidInputHangmanError as e:
-            print(e)
-
-
-        except ResponseLengthError as e:
-            print(e)
-
-
-        else:
-            strikes,letterHolder = h1.get_game_state()
-
-            if strikes == 6:
-                gameOver = True
-                gameLost = True
-
-            if h1.check_for_winner(None,None,letterHolder):
-                gameOver = True
-
-            print(h1)
-
-    if gameLost:
-        wordToGuess = h1.get_word_to_guess()
-        print(f"You lost the game. The word to guess was \"{''.join(wordToGuess)}\"")
-    else:
-        print(f"You won!! The word was \"{''.join(letterHolder)}\"")
-=======
     game = Hangman()
     game.play()
     winner = False
@@ -129,7 +88,6 @@ if res.upper() == 'Y':
 
     if winner:
         print("YOU WON!!")
->>>>>>> master
     
 else:
     print("You chose to not play. See you next time!")
