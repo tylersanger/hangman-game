@@ -14,7 +14,7 @@ def handle_client(conn,addr,players):
     print(f"Player list is {players}.")
     while msg != 'q':
         msg = conn.recv(1024).decode('ascii')
-        print(f"Received \"{msg}\" from client {addr[0].")
+        print(f"Received \"{msg}\" from client {addr[0]}.")
     
     conn.close()
     players.pop(addr[0])
