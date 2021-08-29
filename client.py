@@ -8,3 +8,8 @@ s.connect((IP,port))
 while True:
     msg = input("=> ")
     s.send(msg.encode('ascii'))
+
+    if msg == 'q':
+        break
+
+print("Closing connection with server...")
