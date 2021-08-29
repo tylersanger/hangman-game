@@ -10,7 +10,7 @@ players = {}
 def handle_client(conn,addr,players):
     msg = ''
 
-    print(f"Received connection from {addr[0]} on address {addr[1]}.")
+    print(f"Received connection from {addr[0]}.")
     print(f"Player list is {players}.")
     while msg != 'q':
         msg = conn.recv(1024).decode('ascii')
@@ -18,7 +18,7 @@ def handle_client(conn,addr,players):
     
     conn.close()
     players.pop(addr[0])
-    print(f"Player list {players}.")
+    print(f"Player list {players}. Client {addr[0]} closed the connection.")
 
 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
