@@ -65,17 +65,16 @@ class Hangman:
         gameWon = False
 
         if lengthOfGuess < 1:
-            raise ResponseLengthError("Guess must be at least one character in length. Please try again.")
+            raise ResponseLengthError("Guess must be at least one character in length. Please try again.\n")
         
         for letter in range(0,lengthOfGuess):
 
             if ord(guess[letter].upper()) < ord('A') or ord(guess[letter].upper()) > ord('Z'):
-                raise InvalidInputHangmanError("Invalid input. Must be a character or word with no special characters. Please try again.")
+                raise InvalidInputHangmanError("Invalid input. Must be a character or word with no special characters. Please try again.\n")
                         
         if lengthOfGuess == 1:
 
             if guess in self.__usedLetters:
-                print(f"Guess \"{guess}\" has already been used.")
                 self.__strikes += 1
                 return gameWon
 
@@ -96,7 +95,6 @@ class Hangman:
 
         elif guess in self.__usedWords:
             self.__strikes += 1
-            print(f"Guess \"{guess}\" has already been used.")
             return gameWon
         
         else:
@@ -113,7 +111,7 @@ class Hangman:
 
     def get_game_state(self):
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+        #os.system('cls' if os.name == 'nt' else 'clear')
         state = (f"You have {self.__strikes} strikes.\nWord To Guess: {self.__str__()}\n"
                     + f"Used Letters: {self.__usedLetters}\nUsed Words: {self.__usedWords}")
         return state
