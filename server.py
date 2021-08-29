@@ -3,7 +3,7 @@ from hangman import Hangman
 import json
 import threading
 
-IP = 'localhost'
+IP = '0.0.0.0'
 port = 55987
 players = {}
 
