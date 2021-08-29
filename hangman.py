@@ -17,15 +17,12 @@ class Hangman:
     
     def __str__(self):
 
-        temp = ''
+        temp = ""
 
         for letter in self.__letterHolder:
             temp += letter + " "
         
-        temp += "\n"
-        
-        return str("You have " + str(self.__strikes) + " strikes.\n" +
-               str(temp))
+        return temp
 
 
     def __get_words_and_wordCount(self):
@@ -74,7 +71,7 @@ class Hangman:
         
         for letter in range(0,lengthOfGuess):
 
-            if ord(guess[letter].upper()) < 65 or ord(guess[letter].upper()) > 90:
+            if ord(guess[letter].upper()) < ord('A') or ord(guess[letter].upper()) > ord('Z'):
                 raise InvalidInputHangmanError("Invalid input. Must be a character or word with no special characters. Please try again.")
                         
         if lengthOfGuess == 1:
@@ -82,7 +79,7 @@ class Hangman:
             if guess in self.__usedLetters:
                 print(f"Guess \"{guess}\" has already been used.")
                 self.__strikes += 1
-                return gameWon,self.__letterHolder
+                return gameWon
 
             for letter in range(0,lengthOfWord):
 
@@ -92,36 +89,36 @@ class Hangman:
             
             if not guessedCorrectly:
                 self.__strikes += 1
+                self.__add_guess_to_list(guess)
+                return gameWon
 
             self.__add_guess_to_list(guess)
 
-            return gameWon,self.__letterHolder
+            return self.check_for_winner(guess,self.__wordToGuess,self.__letterHolder)
 
         elif guess in self.__usedWords:
             self.__strikes += 1
             print(f"Guess \"{guess}\" has already been used.")
-            return gameWon,self.__letterHolder
+            return gameWon
         
         else:
             gameWon = self.check_for_winner(guess,self.__wordToGuess,None)
 
             if gameWon:
-                return gameWon,self.__wordToGuess
+                return gameWon
 
             else:
                 self.__add_guess_to_list(guess)
                 self.__strikes += 1
-                return gameWon,self.__letterHolder
+                return gameWon
 
 
     def get_game_state(self):
 
-        temp = ""
-
-        for letter in range(0,len(self.__letterHolder)):
-            temp += str(self.__letterHolder[letter] + " ")
-        
-        return self.__strikes,self.__letterHolder
+        os.system('cls' if os.name == 'nt' else 'clear')
+        state = (f"You have {self.__strikes} strikes.\nWord To Guess: {self.__str__()}\n"
+                    + f"Used Letters: {self.__usedLetters}\nUsed Words: {self.__usedWords}")
+        return state
 
 
     def check_for_winner(self,guess = None,word = None,letterHolder = None):
@@ -164,6 +161,15 @@ class Hangman:
     
 
     def get_word_to_guess(self):
-        return self.__wordToGuess
-    
+        
+        text = ""
+        for letter in self.__wordToGuess:
+            text += letter
 
+        return text
+    
+    def get_strikes(self):
+        return self.__strikes
+    
+    if __name__ == "__main__":
+        os.system("python main.py")
