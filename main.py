@@ -7,9 +7,14 @@ This program plays a game of Hangman. It will choose a randomly chosen word from
 guessed the entire word or reached the six strike
 '''
 
+<<<<<<< HEAD
+=======
+from hangman import Hangman
+>>>>>>> master
 from customException import InvalidInputHangmanError,ResponseLengthError
 from hangman import Hangman
 import os
+import time
 
 os.system('cls' if os.name == 'nt' else 'clear')
 response = list("YyNn")
@@ -60,6 +65,7 @@ while not validRes:
 os.system('cls' if os.name == 'nt' else 'clear')
 
 if res.upper() == 'Y':
+<<<<<<< HEAD
     h1.play()
 
     while not gameOver:
@@ -99,6 +105,31 @@ if res.upper() == 'Y':
         print(f"You lost the game. The word to guess was \"{''.join(wordToGuess)}\"")
     else:
         print(f"You won!! The word was \"{''.join(letterHolder)}\"")
+=======
+    game = Hangman()
+    game.play()
+    winner = False
+    strikes = 0
+
+    while not winner:
+
+        try:
+            print(game.get_game_state())
+            winner = game.check_guess(input("Guess a letter or an entire word: "))
+            strikes = game.get_strikes()
+
+        except Exception as e:
+            print(e)
+            time.sleep(3)
+
+        if strikes == 6:
+            print(game.get_game_state())
+            print(f"You struck out. The word to guess was \"{game.get_word_to_guess()}\".")
+            break;
+
+    if winner:
+        print("YOU WON!!")
+>>>>>>> master
     
 else:
     print("You chose to not play. See you next time!")
