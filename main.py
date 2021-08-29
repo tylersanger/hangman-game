@@ -7,10 +7,7 @@ This program plays a game of Hangman. It will choose a randomly chosen word from
 guessed the entire word or reached the six strike
 '''
 
-<<<<<<< HEAD
-=======
 from hangman import Hangman
->>>>>>> master
 from customException import InvalidInputHangmanError,ResponseLengthError
 from hangman import Hangman
 import os

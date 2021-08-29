@@ -43,11 +43,6 @@ class Hangman:
 
         return words,count
 
-            else:
-                letterHolder.append("_")
-        
-        return letterHolder
-
     def __prepare_game(self,word):
 
         letterHolder = list()
@@ -61,11 +56,6 @@ class Hangman:
                 letterHolder.append("_")
         
         return letterHolder
-
-            if guess in self.__usedLetters:
-                print(f"Guess \"{guess}\" has already been used.")
-                self.__strikes += 1
-                return gameWon,self.__letterHolder
 
     def check_guess(self,guess):
 
