@@ -5,70 +5,65 @@ import json
 import os
 import threading
 
-IP = '0.0.0.0'
+IP = "0.0.0.0"
 port = 55987
 
-def handle_client(conn,addr):
+
+def handle_client(conn, addr):
 
     gameOver = False
     strikes = 0
-    clientMessage = ''
+    clientMessage = ""
     print(f"Received connection from {addr[0]}.")
 
-
-    clientMessage = conn.recv(1024).decode('ascii')
+    clientMessage = conn.recv(1024).decode("ascii")
     print(clientMessage)
 
     if clientMessage == "READY":
-    
+
         game = Hangman()
         game.play()
 
         while not gameOver:
 
             try:
-                clientMessage = game.get_game_state().encode('ascii')
+                clientMessage = game.get_game_state().encode("ascii")
                 conn.send(clientMessage)
-                clientMessage = conn.recv(1024).decode('ascii')
+                clientMessage = conn.recv(1024).decode("ascii")
                 winner = game.check_guess(clientMessage)
                 strikes = game.get_strikes()
 
                 if strikes == 6:
-                    conn.send("GAMEOVER".encode('ascii'))
-                    clientMessage = f"You struck out and lost the game. The word was \"{game.get_word_to_guess()}\"".encode('ascii')
+                    conn.send("GAMEOVER".encode("ascii"))
+                    clientMessage = f'You struck out and lost the game. The word was "{game.get_word_to_guess()}"'.encode(
+                        "ascii"
+                    )
                     conn.send(clientMessage)
                     conn.close()
                     gameOver = True
-                
+
                 if winner:
-                    conn.send("GAMEOVER".encode('ascii'))
-                    clientMessage = "You won the game!!".encode('ascii')
+                    conn.send("GAMEOVER".encode("ascii"))
+                    clientMessage = "You won the game!!".encode("ascii")
                     conn.send(clientMessage)
                     conn.close()
                     gameOver = True
 
             except Exception as e:
-                error = str(e).encode('ascii')
+                error = str(e).encode("ascii")
                 conn.send(error)
 
 
-s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.bind((IP,port))
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((IP, port))
 s.listen()
 threads = []
 connections = []
 
 while True:
 
-    conn,addr = s.accept()
-    t = threading.Thread(target=handle_client,args=(conn,addr))
+    conn, addr = s.accept()
+    t = threading.Thread(target=handle_client, args=(conn, addr))
     connections.append(conn)
     threads.append(t)
     t.start()
-
-
-
-
-
-
-
