@@ -1,18 +1,18 @@
-'''
+"""
 Created by Tyler Sanger
 Copyright: 01/04/2021
 This software is licensed under the MIT license.
 
 This program plays a game of Hangman. It will choose a randomly chosen word from 3000 words and have the player guess until they have either
 guessed the entire word or reached the six strike
-'''
+"""
 
 from hangman import Hangman
-from customException import InvalidInputHangmanError,ResponseLengthError
+from customException import InvalidInputHangmanError, ResponseLengthError
 import os
 import time
 
-os.system('cls' if os.name == 'nt' else 'clear')
+os.system("cls" if os.name == "nt" else "clear")
 response = list("YyNn")
 validRes = False
 
@@ -31,30 +31,34 @@ print("-                              GOOD LUCK!                                
 print("-------------------------------------------------------------------------------")
 
 while not validRes:
-    
+
     try:
         res = input("Are you ready to play? (y/n): ")
 
         if len(res) > 1:
-            raise ResponseLengthError(f"Expected response length of 1. Received response \"{res}\" of length {len(res)}")
+            raise ResponseLengthError(
+                f'Expected response length of 1. Received response "{res}" of length {len(res)}'
+            )
 
         if res not in response:
-            raise InvalidInputHangmanError(f"Expected input of y/n or Y/N. Received \"{res}\"")
+            raise InvalidInputHangmanError(
+                f'Expected input of y/n or Y/N. Received "{res}"'
+            )
 
     except ResponseLengthError as e:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system("cls" if os.name == "nt" else "clear")
         print(e)
 
     except InvalidInputHangmanError as e:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system("cls" if os.name == "nt" else "clear")
         print(e)
 
     else:
         validRes = True
 
-os.system('cls' if os.name == 'nt' else 'clear')
+os.system("cls" if os.name == "nt" else "clear")
 
-if res.upper() == 'Y':
+if res.upper() == "Y":
     game = Hangman()
     game.play()
     winner = False
@@ -73,12 +77,14 @@ if res.upper() == 'Y':
 
         if strikes == 6:
             print(game.get_game_state())
-            print(f"You struck out. The word to guess was \"{game.get_word_to_guess()}\".")
-            break;
+            print(
+                f'You struck out. The word to guess was "{game.get_word_to_guess()}".'
+            )
+            break
 
     if winner:
-        print("YOU WON!!")
-    
+        print(f'YOU WON!! The correct word was "{game.get_word_to_guess()}".')
+
 else:
     print("You chose to not play. See you next time!")
     exit(0)
