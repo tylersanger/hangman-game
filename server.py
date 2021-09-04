@@ -17,7 +17,6 @@ def handle_client(conn, addr):
     print(f"Received connection from {addr[0]}.")
 
     clientMessage = conn.recv(1024).decode("ascii")
-    print(clientMessage)
 
     if clientMessage == "READY":
 
@@ -30,6 +29,7 @@ def handle_client(conn, addr):
                 clientMessage = game.get_game_state().encode("ascii")
                 conn.send(clientMessage)
                 clientMessage = conn.recv(1024).decode("ascii")
+                print(f'{addr[0]} guessed "{clientMessage}"')
                 winner = game.check_guess(clientMessage)
                 strikes = game.get_strikes()
 
@@ -62,8 +62,20 @@ connections = []
 
 while True:
 
-    conn, addr = s.accept()
-    t = threading.Thread(target=handle_client, args=(conn, addr))
-    connections.append(conn)
-    threads.append(t)
-    t.start()
+    try:
+        conn, addr = s.accept()
+        t = threading.Thread(target=handle_client, args=(conn, addr))
+        connections.append(conn)
+        threads.append(t)
+        t.start()
+    except KeyboardInterrupt:
+        print("Server is shutting down...")
+        break
+
+for thread in threads:
+    thread.join()
+
+for connection in connections:
+    connection.close()
+s.close()
+print("Goodbye...")
