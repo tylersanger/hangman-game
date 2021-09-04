@@ -39,14 +39,12 @@ def handle_client(conn, addr):
                         "ascii"
                     )
                     conn.send(clientMessage)
-                    conn.close()
                     gameOver = True
 
                 if winner:
                     conn.send("GAMEOVER".encode("ascii"))
                     clientMessage = "You won the game!!".encode("ascii")
                     conn.send(clientMessage)
-                    conn.close()
                     gameOver = True
 
             except Exception as e:
