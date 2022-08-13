@@ -2,7 +2,7 @@ import socket
 import os
 import json
 
-IP = '192.168.1.9'
+IP = 'tylersanger.com'
 port = 55987
 jData = ''
 last_stats = ""
