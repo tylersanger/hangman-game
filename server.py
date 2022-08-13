@@ -1,6 +1,6 @@
 import socket
 from hangman import Hangman
-from customException import InvalidInputHangmanError, ResponseLengthError
+from customException import ResponseLengthError, InvalidInputHangmanError
 import json
 import os
 import threading
@@ -13,6 +13,7 @@ def handle_client(conn, addr):
 
     gameOver = False
     strikes = 0
+    data = {'STATE' : '', 'MESSAGE' : ''}
     clientMessage = ""
     print(f"Received connection from {addr[0]}.")
 
@@ -26,30 +27,35 @@ def handle_client(conn, addr):
         while not gameOver:
 
             try:
-                clientMessage = game.get_game_state().encode("ascii")
-                conn.send(clientMessage)
-                clientMessage = conn.recv(1024).decode("ascii")
+                clientMessage = game.get_game_state()
+                data['STATE'] = 'STATS'
+                data['MESSAGE'] = clientMessage
+                conn.send(json.dumps(data).encode("utf-8"))
+
+                clientMessage = conn.recv(1024).decode("utf-8")
                 print(f'{addr[0]} guessed "{clientMessage}"')
                 winner = game.check_guess(clientMessage)
                 strikes = game.get_strikes()
 
                 if strikes == 6:
-                    conn.send("GAMEOVER".encode("ascii"))
-                    clientMessage = f'You struck out and lost the game. The word was "{game.get_word_to_guess()}"'.encode(
-                        "ascii"
-                    )
-                    conn.send(clientMessage)
+                    data['STATE'] = 'STRIKEOUT'
+                    data['MESSAGE'] = (f'You struck out and lost the game. The word was "{game.get_word_to_guess()}"')
+                    conn.send(json.dumps(data).encode("utf-8"))
                     gameOver = True
 
                 if winner:
-                    conn.send("GAMEOVER".encode("ascii"))
-                    clientMessage = "You won the game!!".encode("ascii")
-                    conn.send(clientMessage)
+                    data['STATE'] = 'GAMEOVER'
+                    data['MESSAGE'] = "You won the game!! The word was " + game.get_word_to_guess()
+                    conn.send(json.dumps(data).encode("utf-8"))
                     gameOver = True
 
-            except Exception as e:
-                error = str(e).encode("ascii")
-                conn.send(error)
+            except (InvalidInputHangmanError, ResponseLengthError) as e:
+                data['STATE'] = 'ERROR'
+                data['MESSAGE'] = str(e)
+                conn.send(json.dumps(data).encode("utf-8"))
+            except (ConnectionAbortedError, ConnectionResetError) as e:
+                print(f"ERROR: {str(e)}: Connection to client " + addr[0] + " was lost.")
+                break;
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -69,11 +75,11 @@ while True:
     except KeyboardInterrupt:
         print("Server is shutting down...")
         break
-
-for thread in threads:
-    thread.join()
+    except Exception as e:
+        print("Lost connection to client" + addr[0])
+        connections.remove(conn)
 
 for connection in connections:
     connection.close()
 s.close()
-print("Goodbye...")
+exit("Goodbye...")
