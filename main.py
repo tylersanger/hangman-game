@@ -12,7 +12,7 @@ import os
 from hangman import Hangman
 from customException import InvalidInputHangmanError,ResponseLengthError
 
-os.system('cls' if os.name == 'nt' else 'clear')
+os.system("cls" if os.name == "nt" else "clear")
 response = list("YyNn")
 VALID_RES = False
 GAME_OVER = False
@@ -42,20 +42,22 @@ while not VALID_RES:
                                         of length {len(res)}""")
 
         if res not in response:
-            raise InvalidInputHangmanError(f"Expected input of y/n or Y/N. Received \"{res}\"")
+            raise InvalidInputHangmanError(
+                f'Expected input of y/n or Y/N. Received "{res}"'
+            )
 
     except ResponseLengthError as e:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system("cls" if os.name == "nt" else "clear")
         print(e)
 
     except InvalidInputHangmanError as e:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system("cls" if os.name == "nt" else "clear")
         print(e)
 
     else:
         VALID_RES = True
 
-os.system('cls' if os.name == 'nt' else 'clear')
+os.system("cls" if os.name == "nt" else "clear")
 
 if res.upper() == 'Y':
     hangman.play()
