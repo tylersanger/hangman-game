@@ -38,8 +38,8 @@ while not VALID_RES:
         res = input("Are you ready to play? (y/n): ")
 
         if len(res) > 1:
-            raise ResponseLengthError(f"""Expected response length of 1. Received response \"{res}\"
-                                        of length {len(res)}""")
+            raise ResponseLengthError(f"Expected response length of 1. Received" \
+                                        f" response \"{res}\" of length {len(res)}")
 
         if res not in response:
             raise InvalidInputHangmanError(
