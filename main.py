@@ -1,19 +1,22 @@
-'''
+"""
 Created by Tyler Sanger
 Copyright: 01/04/2021
 This software is licensed under the MIT license.
 
-This program plays a game of Hangman. It will choose a randomly chosen word from 3000 words and have the player guess until they have either
+This program plays a game of Hangman. It will choose a randomly chosen word from 3000 words
+and have the player guess until they have either
 guessed the entire word or reached the six strike
-'''
+"""
 
-import hangman
-from customException import InvalidInputHangmanError,ResponseLengthError
 import os
+from hangman import Hangman
+from customException import InvalidInputHangmanError,ResponseLengthError
 
 os.system('cls' if os.name == 'nt' else 'clear')
 response = list("YyNn")
-validRes = False
+VALID_RES = False
+GAME_OVER = False
+hangman = Hangman()
 
 print("----------------------------HANGMAN INTRODUCTION-------------------------------")
 print("- 1. This game will choose a random word out of 3000 for you to guess from.   -")
@@ -29,13 +32,14 @@ print("-                                                                        
 print("-                              GOOD LUCK!                                     -")
 print("-------------------------------------------------------------------------------")
 
-while not validRes:
-    
+while not VALID_RES:
+
     try:
         res = input("Are you ready to play? (y/n): ")
 
         if len(res) > 1:
-            raise ResponseLengthError(f"Expected response length of 1. Received response \"{res}\" of length {len(res)}")
+            raise ResponseLengthError(f"""Expected response length of 1. Received response \"{res}\"
+                                        of length {len(res)}""")
 
         if res not in response:
             raise InvalidInputHangmanError(f"Expected input of y/n or Y/N. Received \"{res}\"")
@@ -49,13 +53,31 @@ while not validRes:
         print(e)
 
     else:
-        validRes = True
+        VALID_RES = True
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
 if res.upper() == 'Y':
     hangman.play()
-    
+
+    while not GAME_OVER:
+
+        guess = input("What is your guess: ")
+
+        try:
+            GAME_OVER = hangman.check_guess(guess)
+        except (InvalidInputHangmanError, ResponseLengthError) as e:
+            print(e)
+        else:
+            strikes, letter_holder = hangman.get_game_state()
+            print(f"{letter_holder}\nStrikes: {strikes}\n")
+
+            if strikes == 6:
+                GAME_OVER = True
+                WORD = "".join(hangman.get_word_to_guess())
+                print(f"You struck out!! The word to guess was {WORD}.")
+                break
+
 else:
     print("You chose to not play. See you next time!")
     exit(0)
